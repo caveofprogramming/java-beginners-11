@@ -1,0 +1,13 @@
+**/bin/**
+**/.git/**
+**/.metadata/**
+**/.DS_Store/**
+**/.settings/**
+**/.DS_Store
+**/.classpath
+**/.project
+*/.classpath
+*/.project
+
+
+/.metadata/
