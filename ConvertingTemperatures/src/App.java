@@ -8,6 +8,8 @@ public class App {
 		double celsius = (fahrenheit - 32) * 5.0/9.0;
 		
 		System.out.println(fahrenheit + " degrees Fahrenheit is " + celsius + " degrees celsius.");
+		
+		// TODO Make formatting nicer
 	}
 
 }
