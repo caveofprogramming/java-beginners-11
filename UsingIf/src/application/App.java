@@ -14,7 +14,7 @@ public class App {
 		
 		double temperatureCelsius = (temperatureFahrenheit - 32) * (5.0/9.0);
 		
-		System.out.printf("Temperature celsisus: %.2f\n", temperatureCelsius);
+		System.out.printf("Temperature celsius: %.2f\n", temperatureCelsius);
 		
 		// If temperature in celsius less than 21, print "Too cold!"
 		// If temperature in celsius greater than 21, print "Warm enough."
