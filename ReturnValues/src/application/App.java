@@ -3,8 +3,12 @@ package application;
 public class App {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		ReturnValues values1 = new ReturnValues();
+		
+		String animal = values1.getAnimal();
+		
+		System.out.println(animal);
+		
 	}
 
 }
