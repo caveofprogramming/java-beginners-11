@@ -13,6 +13,10 @@ public class App {
 		
 		int added = calc.add(7, 5);
 		System.out.println("7 plus 5 is: " + added);
+		
+
+		int multiplied = calc.multiply(7, 5);
+		System.out.println("7 times 5 is: " + multiplied);
 	}
 
 }
