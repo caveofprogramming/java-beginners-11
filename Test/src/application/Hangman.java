@@ -10,7 +10,6 @@ public class Hangman {
 
 	private Scanner scanner = new Scanner(System.in);
 
-	private char[] guessed;
 	private int mistakes = 0;
 
 	private final int MAX_MISTAKES = 5;
@@ -20,11 +19,13 @@ public class Hangman {
 	}
 
 	public void displayWord() {
+		System.out.println("\n\n");
 		System.out.println(guess);
 		System.out.println();
 	}
 
 	public void getInput() {
+		System.out.printf("\nTries remaining: %d\n", MAX_MISTAKES - mistakes);
 		System.out.print("\nGuess a letter: ");
 		String attempt = scanner.nextLine();
 
@@ -44,11 +45,11 @@ public class Hangman {
 			return false;
 		}
 
-		System.out.printf("\nTries remaining: %d\n", MAX_MISTAKES - mistakes);
 		return true;
 	}
 
 	public void end() {
 		scanner.close();
 	}
+
 }
