@@ -4,19 +4,24 @@ public class Cat {
 	private String name;
 	public static final String FOOD = "Cat food"; 
 	private static int count = 0;
+	private int id;
+	
 
 	public Cat(String name) {
 		this.name = name;
+		
+		id = count;
+		
 		count++;
 	}
 	
-	public int getCount() {
+	public static int getCount() {
 		return count;
 	}
 
 	@Override
 	public String toString() {
-		return "Cat [name=" + name + "]";
+		return String.format("Cat id: %d, name: %s", id, name);
 	}
 	
 	

@@ -10,7 +10,7 @@ public class Cat {
 		count++;
 	}
 	
-	public int getCount() {
+	public static int getCount() {
 		return count;
 	}
 
