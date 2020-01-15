@@ -3,9 +3,11 @@ package application;
 public class App {
 
 	public static void main(String[] args) {
-		Apple apple = new Apple();
+		Person person1 = new Person("Claire");
+		System.out.println(person1);
 		
-		System.out.println(apple);
+		Person person2 = new Person();
+		System.out.println(person2);
 	}
 
 }
