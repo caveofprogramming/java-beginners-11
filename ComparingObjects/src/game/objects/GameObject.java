@@ -6,6 +6,7 @@ public class GameObject {
 
 	// @formatter:off
 	
+	@SuppressWarnings("unused") // Added temporarily to suppress 'not used' warning
 	private int[][] comparison = {
 			//				rock	paper	scissors
 			/* rock */ 		{	0,		0,		0,			},

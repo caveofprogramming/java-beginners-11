@@ -7,6 +7,7 @@ import game.objects.Scissors;
 
 public class Game {
 	
+	@SuppressWarnings("unused") // Added temporarily to suppress 'not used' warning
 	private GameObject[] objects = {new Rock(), new Paper(), new Scissors()};
 	
 	public void run() {

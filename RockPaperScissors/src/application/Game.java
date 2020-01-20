@@ -45,8 +45,6 @@ public class Game {
 
 	public GameObject getPlayerObject() {
 
-		GameObject obj = null;
-
 		do {
 			System.out.println("Enter your choice (0. rock, 1. paper, 2. scissors): ");
 
