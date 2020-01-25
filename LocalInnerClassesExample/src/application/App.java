@@ -26,7 +26,6 @@ public class App {
 			@Override
 			public void run() {
 				print();
-				
 			}
 		}
 		
