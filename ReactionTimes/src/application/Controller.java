@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import entity.ReactionTime;
 import interfaces.FileListener;
+import interfaces.QuitListener;
 import interfaces.SpacebarListener;
 import interfaces.TestListener;
 import panels.MessagePanel;
@@ -22,7 +23,7 @@ import panels.ReactionPanel;
  * Listen to events they fire, and instruct them appropriately.
  */
 
-public class Controller implements SpacebarListener, TestListener, FileListener {
+public class Controller implements SpacebarListener, TestListener, FileListener, QuitListener {
 
 	private MainFrame mainFrame;
 	private MessagePanel startPanel;
@@ -41,8 +42,8 @@ public class Controller implements SpacebarListener, TestListener, FileListener 
 		startPanel = new MessagePanel("Press spacebar to continue", null);
 		completePanel = new MessagePanel("Test complete", "Press spacebar to try again.");
 		reactionPanel = new ReactionPanel();
-		
-		reactionPanel.setNumTests(20);
+
+		reactionPanel.setNumTests(10);
 
 		/*
 		 * CardLayout lets us present different views to the user, as if each view is a
@@ -59,17 +60,18 @@ public class Controller implements SpacebarListener, TestListener, FileListener 
 		mainFrame.addSpacebarListener(this);
 		reactionPanel.setTestListener(this);
 		mainFrame.setFileListener(this);
-		
+		mainFrame.setQuitListener(() -> reactionPanel.stop());
+
 		setState(State.START);
 	}
 
 	private void setState(State state) {
 		this.state = state;
 		cardLayout.show(mainFrame.getContentPane(), state.toString());
-		
+
 		// The 'save' menu only appears when a test is complete.
 		// Otherwise we hide it.
-		if(state == State.START) {
+		if (state == State.START) {
 			mainFrame.hideSaveMenu();
 		}
 	}
@@ -96,16 +98,21 @@ public class Controller implements SpacebarListener, TestListener, FileListener 
 
 	@Override
 	public void testComplete() {
-		mainFrame.showSaveMenu();
-		
-		long averageReactionTime = reactionPanel.getAverageReactionTime();
 
-		String info = String.format("Average reaction time: %d milliseconds", averageReactionTime);
-		completePanel.setTitle(info);
+		if (reactionPanel.hasData()) {
+			mainFrame.showSaveMenu();
 
-		setState(State.COMPLETE);
+			long averageReactionTime = reactionPanel.getAverageReactionTime();
+
+			String info = String.format("Average reaction time: %d milliseconds", averageReactionTime);
+			completePanel.setTitle(info);
+
+			setState(State.COMPLETE);
+		} else {
+			setState(State.START);
+		}
 	}
-	
+
 	/*
 	 * Save a file containing a list of reaction times.
 	 */
@@ -115,19 +122,26 @@ public class Controller implements SpacebarListener, TestListener, FileListener 
 		List<ReactionTime> reactionTimes = reactionPanel.getReactionTimes();
 
 		try (OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(file))) {
-			
+
 			int lineNumber = 1;
-			for(ReactionTime time: reactionTimes) {
+			for (ReactionTime time : reactionTimes) {
 				String line = String.format("%d,\"%s\",%d", lineNumber, time.getDate(), time.getReactionTime());
 				os.write(line);
 				os.write("\n");
 				lineNumber++;
 			}
 		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(mainFrame, "Unable to save file", "Save reaction times", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(mainFrame, "Unable to save file", "Save reaction times",
+					JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e1) {
-			JOptionPane.showMessageDialog(mainFrame, "Error saving file", "Save reaction times", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(mainFrame, "Error saving file", "Save reaction times",
+					JOptionPane.WARNING_MESSAGE);
 		}
 
+	}
+
+	@Override
+	public void quit() {
+		reactionPanel.stop();
 	}
 }

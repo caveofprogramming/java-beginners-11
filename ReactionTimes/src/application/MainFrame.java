@@ -13,6 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import interfaces.FileListener;
+import interfaces.QuitListener;
 import interfaces.SpacebarListener;
 
 public class MainFrame extends JFrame {
@@ -20,6 +21,7 @@ public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private SpacebarListener spacebarListener;
 	private FileListener fileListener;
+	private QuitListener quitListener;
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenuItem saveMenu = new JMenuItem("Save");
 	private JMenu fileMenu = new JMenu("File");
@@ -31,6 +33,9 @@ public class MainFrame extends JFrame {
 			if(e.getKeyCode() == 0x20) {
 				// spacebar pressed
 				spacebarListener.onSpacebar();
+			}
+			else if(e.getKeyChar() == 'x'){
+				quitListener.quit();
 			}
 		}
 		
@@ -77,6 +82,10 @@ public class MainFrame extends JFrame {
 	
 	public void setFileListener(FileListener fs) {
 		this.fileListener = fs;
+	}
+	
+	public void setQuitListener(QuitListener quitListener) {
+		this.quitListener = quitListener;
 	}
 	
 	/*

@@ -23,6 +23,7 @@ public class ReactionPanel extends JPanel {
 	private TestListener testListener;
 	private int numTests = 10;
 	private int test = 0;
+	private SwingWorker<Boolean, Void> worker;
 
 	List<ReactionTime> reactionTimes = new ArrayList<>();
 	Long startTime = 0L;
@@ -32,7 +33,7 @@ public class ReactionPanel extends JPanel {
 		setLayout(new BorderLayout());
 		add(textLabel, BorderLayout.CENTER);
 		setBackground(Color.red);
-		
+
 		addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
 				startTest();
@@ -40,17 +41,17 @@ public class ReactionPanel extends JPanel {
 		});
 
 	}
-	
+
 	public void setNumTests(int num) {
 		this.numTests = num;
 	}
 
 	public void startTest() {
-		
+
 		setBackground(Color.red);
 		reactionTimes.clear();
-		
-		var worker = new SwingWorker<Boolean, Void>() {
+
+		worker = new SwingWorker<Boolean, Void>() {
 
 			@Override
 			protected Boolean doInBackground() throws Exception {
@@ -73,11 +74,22 @@ public class ReactionPanel extends JPanel {
 		worker.execute();
 	}
 
+	public void stop() {
+		if (worker != null) {
+			worker.cancel(true);
+			testListener.testComplete();
+		}
+	}
+
 	public void setTestListener(TestListener testListener) {
 		this.testListener = testListener;
 
 	}
 	
+	public boolean hasData() {
+		return reactionTimes.size() != 0;
+	}
+
 	public void onSpacebar() {
 
 		long currentTime = System.currentTimeMillis();
