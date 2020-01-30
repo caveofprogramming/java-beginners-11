@@ -21,7 +21,7 @@ import interfaces.TestListener;
 public class ReactionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private TestListener testListener;
-	private static final int NUM_TESTS = 2;
+	private int numTests = 10;
 	private int test = 0;
 
 	List<ReactionTime> reactionTimes = new ArrayList<>();
@@ -40,6 +40,10 @@ public class ReactionPanel extends JPanel {
 		});
 
 	}
+	
+	public void setNumTests(int num) {
+		this.numTests = num;
+	}
 
 	public void startTest() {
 		
@@ -55,7 +59,7 @@ public class ReactionPanel extends JPanel {
 
 				test = 0;
 
-				while (test < NUM_TESTS) {
+				while (test < numTests) {
 					Thread.sleep(random.nextInt(5000) + 3000);
 					setBackground(Color.green);
 					startTime = System.currentTimeMillis();
@@ -83,7 +87,7 @@ public class ReactionPanel extends JPanel {
 
 		setBackground(Color.red);
 
-		if (test == NUM_TESTS) {
+		if (test == numTests) {
 			testListener.testComplete();
 		}
 	}

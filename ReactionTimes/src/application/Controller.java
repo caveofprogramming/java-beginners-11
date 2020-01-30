@@ -41,6 +41,8 @@ public class Controller implements SpacebarListener, TestListener, FileListener 
 		startPanel = new MessagePanel("Press spacebar to continue", null);
 		completePanel = new MessagePanel("Test complete", "Press spacebar to try again.");
 		reactionPanel = new ReactionPanel();
+		
+		reactionPanel.setNumTests(20);
 
 		/*
 		 * CardLayout lets us present different views to the user, as if each view is a
@@ -113,10 +115,13 @@ public class Controller implements SpacebarListener, TestListener, FileListener 
 		List<ReactionTime> reactionTimes = reactionPanel.getReactionTimes();
 
 		try (OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(file))) {
+			
+			int lineNumber = 1;
 			for(ReactionTime time: reactionTimes) {
-				String line = String.format("%s,%d", time.getDate(), time.getReactionTime());
+				String line = String.format("%d,\"%s\",%d", lineNumber, time.getDate(), time.getReactionTime());
 				os.write(line);
 				os.write("\n");
+				lineNumber++;
 			}
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(mainFrame, "Unable to save file", "Save reaction times", JOptionPane.ERROR_MESSAGE);
