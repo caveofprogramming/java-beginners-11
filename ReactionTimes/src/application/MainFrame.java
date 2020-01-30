@@ -1,48 +1,61 @@
 package application;
 
-import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+
+import interfaces.FileListener;
+import interfaces.SpacebarListener;
 
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private SpacebarListener spacebarListener;
+	private FileListener fileListener;
+	private JMenuBar menuBar = new JMenuBar();
+	private JMenuItem saveMenu = new JMenuItem("Save");
+	private JMenu fileMenu = new JMenu("File");
 	
-	private enum State {
-		START, REACT
-	}
-	
-	private ReactionPanel reactionPanel = new ReactionPanel();
-	
-	private State state = State.START;
-
-	private CardLayout cardLayout;
-
-	// Used to detect key pressed.
 	private class KeyCheck extends KeyAdapter {
-		public void keyPressed(KeyEvent e) {
-			
-			if(state == State.START) {
-				cardLayout.show(MainFrame.this.getContentPane(), State.REACT.toString());
-				state = State.REACT;
-			}
-			else {
-				reactionPanel.reset();
-			}
-		}
-	}
-	
-	private class WhenComplete implements CompletionListener {
 
 		@Override
-		public void complete() {
-			state = State.START;
-			cardLayout.show(MainFrame.this.getContentPane(), State.START.toString());
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode() == 0x20) {
+				// spacebar pressed
+				spacebarListener.onSpacebar();
+			}
 		}
 		
 	}
+	
+	/*
+	 * Preset the 'save file' dialog.
+	 */
+	private class SaveMenuAction implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			File file = new File("reactiontimes.csv");
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setSelectedFile(file);
+			fileChooser.setDialogTitle("Save reaction times");  
+			
+			int userSelection = fileChooser.showSaveDialog(MainFrame.this.getContentPane());
+			
+			if (userSelection == JFileChooser.APPROVE_OPTION) {
+			    File fileToSave = fileChooser.getSelectedFile();
+			    fileListener.save(fileToSave);
+			}
+		}
+	}
+
 
 	public MainFrame() {
 		super("Reaction Times");
@@ -50,20 +63,38 @@ public class MainFrame extends JFrame {
 		// "Listen" for key presses.
 		addKeyListener(new KeyCheck());
 		
-		reactionPanel.addCompletionListener(new WhenComplete());
-		
-		/*
-		 * CardLayout lets us present different views to the user,
-		 * as if each view is a card in a deck of cards.
-		 * See https://docs.oracle.com/javase/tutorial/uiswing/layout/card.html
-		 */
-		cardLayout = new CardLayout();
-		setLayout(cardLayout);
-		add(new StartPanel(), State.START.toString());
-		add(reactionPanel, State.REACT.toString());
+		saveMenu.addActionListener(new SaveMenuAction());
+		setJMenuBar(menuBar);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(600, 400);
 		setVisible(true);
 	}
+
+	public void addSpacebarListener(SpacebarListener spacebarListener) {
+		this.spacebarListener = spacebarListener;
+	}
+	
+	public void setFileListener(FileListener fs) {
+		this.fileListener = fs;
+	}
+	
+	/*
+	 * Show the menu
+	 */
+	public void showSaveMenu() {
+		fileMenu.add(saveMenu);
+ 		menuBar.add(fileMenu);
+		menuBar.revalidate(); // Tell the menu it needs to redraw itself.
+        menuBar.repaint(); // Trigger an actual redraw.
+	}
+	
+	/*
+	 * Hide the menu
+	 */
+	public void hideSaveMenu() {
+		menuBar.remove(fileMenu);
+		menuBar.revalidate();
+        menuBar.repaint();
+	}	
 }
