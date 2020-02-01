@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -46,7 +48,6 @@ public class MainFrame extends JFrame {
 	 */
 	private class SaveMenuAction implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
 			File file = new File("reactiontimes.csv");
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setSelectedFile(file);

@@ -1,11 +1,10 @@
 package application;
 
 import java.awt.CardLayout;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -15,8 +14,10 @@ import interfaces.FileListener;
 import interfaces.QuitListener;
 import interfaces.SpacebarListener;
 import interfaces.TestListener;
+import panels.DetailsPanel;
 import panels.MessagePanel;
 import panels.ReactionPanel;
+import panels.StartPanel;
 
 /*
  * Create the various user interface components.
@@ -26,22 +27,24 @@ import panels.ReactionPanel;
 public class Controller implements SpacebarListener, TestListener, FileListener, QuitListener {
 
 	private MainFrame mainFrame;
-	private MessagePanel startPanel;
+	private StartPanel startPanel;
 	private ReactionPanel reactionPanel;
 	private MessagePanel completePanel;
+	private DetailsPanel detailsPanel;
 	private CardLayout cardLayout;
 
 	private enum State {
-		START, REACT, COMPLETE;
+		START, REACT, COMPLETE, DETAILS;
 	}
 
 	private State state = State.START;
 
 	public Controller() {
 		mainFrame = new MainFrame();
-		startPanel = new MessagePanel("Press spacebar to continue", null);
-		completePanel = new MessagePanel("Test complete", "Press spacebar to try again.");
+		startPanel = new StartPanel();
+		completePanel = new MessagePanel("Test complete", "Press spacebar to view details.");
 		reactionPanel = new ReactionPanel();
+		detailsPanel = new DetailsPanel();
 
 		reactionPanel.setNumTests(10);
 
@@ -56,11 +59,12 @@ public class Controller implements SpacebarListener, TestListener, FileListener,
 		mainFrame.add(startPanel, State.START.toString());
 		mainFrame.add(reactionPanel, State.REACT.toString());
 		mainFrame.add(completePanel, State.COMPLETE.toString());
+		mainFrame.add(detailsPanel, State.DETAILS.toString());
 
 		mainFrame.addSpacebarListener(this);
-		reactionPanel.setTestListener(this);
 		mainFrame.setFileListener(this);
 		mainFrame.setQuitListener(() -> reactionPanel.stop());
+		reactionPanel.setTestListener(this);
 
 		setState(State.START);
 	}
@@ -82,12 +86,16 @@ public class Controller implements SpacebarListener, TestListener, FileListener,
 	public void onSpacebar() {
 		switch (state) {
 		case START:
+			reactionPanel.setNumTests(startPanel.getNumTests());
 			setState(State.REACT);
 			break;
 		case REACT:
 			reactionPanel.onSpacebar();
 			break;
 		case COMPLETE:
+			setState(State.DETAILS);
+			break;
+		case DETAILS:
 			setState(State.START);
 			break;
 		default:
@@ -106,6 +114,9 @@ public class Controller implements SpacebarListener, TestListener, FileListener,
 
 			String info = String.format("Average reaction time: %d milliseconds", averageReactionTime);
 			completePanel.setTitle(info);
+			
+			List<ReactionTime> reactionTimes = reactionPanel.getReactionTimes();
+			detailsPanel.setReactionTimes(reactionTimes);
 
 			setState(State.COMPLETE);
 		} else {
@@ -121,21 +132,19 @@ public class Controller implements SpacebarListener, TestListener, FileListener,
 	public void save(File file) {
 		List<ReactionTime> reactionTimes = reactionPanel.getReactionTimes();
 
-		try (OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(file))) {
+		try (BufferedWriter br = new BufferedWriter(new FileWriter(file))) {
 
 			int lineNumber = 1;
 			for (ReactionTime time : reactionTimes) {
 				String line = String.format("%d,\"%s\",%d", lineNumber, time.getDate(), time.getReactionTime());
-				os.write(line);
-				os.write("\n");
+				br.write(line);
+				br.write("\n");
 				lineNumber++;
 			}
-		} catch (FileNotFoundException e) {
+
+		} catch (IOException e2) {
 			JOptionPane.showMessageDialog(mainFrame, "Unable to save file", "Save reaction times",
 					JOptionPane.ERROR_MESSAGE);
-		} catch (IOException e1) {
-			JOptionPane.showMessageDialog(mainFrame, "Error saving file", "Save reaction times",
-					JOptionPane.WARNING_MESSAGE);
 		}
 
 	}
