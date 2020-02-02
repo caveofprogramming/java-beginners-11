@@ -13,8 +13,15 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+
+/**
+ * 
+ * GridBagLayout lets us add components in a grid. See Java docs for more info.
+ * We will use only three cells, in a column.
+ * 
+ * This panel contains labels, plus a spinner for configuring the number of trials.
+ *
+ */
 
 public class StartPanel extends JPanel {
 	/**
@@ -33,10 +40,14 @@ public class StartPanel extends JPanel {
 		infoLabel = new JLabel("Press 'x' to stop early at any time.");
 		spinner = new JSpinner();
 		spinner.setValue(10);
+		
+		// Set the spinner editor to a (non-editable) JLabel. Then the spinner
+		// can be adjusted via the up-down control, but values can't be edited via
+		// the keyboard. This ensures that we don't have to validate keyboard entry,
+		// plus it won't consume our spacebar clicks and prevent them from reaching
+		// MainFrame.
 		JLabel spinnerEditor = new JLabel(spinner.getValue().toString());
-		
 		spinner.addChangeListener(e->spinnerEditor.setText(spinner.getValue().toString()));
-		
 		
 		spinner.setEditor(spinnerEditor);
 		
@@ -46,28 +57,39 @@ public class StartPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		
 		GridBagConstraints gc = new GridBagConstraints();
-		gc.fill = GridBagConstraints.NONE;
+		
+		gc.fill = GridBagConstraints.NONE; // Let components be their preferred size.
 		gc.gridx = 0;
 		gc.gridy = 0;
 		gc.weightx = 0.0;
-		gc.weighty = 0.4;
-		gc.anchor = GridBagConstraints.SOUTH;
 		
-		gc.gridwidth=2;
+		// Anything would work here since it's the same for all components.
+		/// The weights determine how much space cells take up.
+		gc.weighty = 0.5; 
+		
+		// Set the prompt text to align near the bottom of the first cell.
+		gc.anchor = GridBagConstraints.SOUTH;
+
 		add(promptLabel, gc);
 		
+		// To get the spinner and text next to it to align, add them both to JPanel.
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
 		controlPanel.add(spinnerLabel);
 		controlPanel.add(spinner);
 		
+		// Move one cell down.
 		gc.gridy++;
+		
+		// Put this panel near the top of the second cell down.
 		gc.anchor = GridBagConstraints.NORTH;
+		
+		// Add a bit of padding above this panel.
 		gc.insets = new Insets(20, 0, 0, 0);
 		add(controlPanel, gc);
 		
+		// Finally, add a bit of info text underneath all of the above.
 		gc.gridy++;
-		gc.gridwidth = 2;
 		add(infoLabel, gc);
 	}
 	

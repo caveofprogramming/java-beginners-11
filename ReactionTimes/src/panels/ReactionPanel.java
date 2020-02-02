@@ -85,7 +85,7 @@ public class ReactionPanel extends JPanel {
 		this.testListener = testListener;
 
 	}
-	
+
 	public boolean hasData() {
 		return reactionTimes.size() != 0;
 	}
@@ -93,14 +93,17 @@ public class ReactionPanel extends JPanel {
 	public void onSpacebar() {
 
 		long currentTime = System.currentTimeMillis();
-		long reactionTime = currentTime - startTime;
 
-		reactionTimes.add(new ReactionTime(new Date(), reactionTime));
+		if (getBackground() == Color.green) {
+			long reactionTime = currentTime - startTime;
 
-		setBackground(Color.red);
+			reactionTimes.add(new ReactionTime(new Date(), reactionTime));
+			
+			setBackground(Color.red);
 
-		if (test == numTests) {
-			testListener.testComplete();
+			if (test == numTests) {
+				testListener.testComplete();
+			}
 		}
 	}
 
