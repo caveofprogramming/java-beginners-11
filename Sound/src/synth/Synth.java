@@ -27,21 +27,24 @@ public class Synth implements Closeable {
 	
 	public void play(MusicalNote note, int duration) {
 				
-				int numberSamples = (SAMPLE_RATE * duration)/1000; // total number of samples to create
+				int totalSamples = (SAMPLE_RATE * duration)/1000; // total number of samples to create
+				double envelope = 1.0;
 				
 				double frequency = note.getFrequency();
 				double wavelength = SAMPLE_RATE/frequency; 
 				
 				byte[] buf = new byte[2];
 				
-				for(int sampleNumber=0; sampleNumber<numberSamples; sampleNumber++) {
+				for(int i=0; i<totalSamples; i++) {
 
-					short sample = (short)(Short.MAX_VALUE * Math.sin(2 * Math.PI * sampleNumber/wavelength));
+					short sample = (short)(envelope * Short.MAX_VALUE * Math.sin(2 * Math.PI * i/wavelength));
 					
 					buf[0] = (byte) (sample & 0xFF);  
 					buf[1] = (byte) (sample >> 8);	
 					
 					line.write(buf, 0, 2);
+					
+					envelope = 1.0 - ((double)i/totalSamples);
 				}
 	}
 

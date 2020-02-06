@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import javax.sound.sampled.LineUnavailableException;
+import javax.swing.JLabel;
 
 import gui.data.NoteSet;
 import gui.data.ScoreNote;
@@ -15,13 +16,26 @@ public class Controller implements KeyPressListener {
 	private MainFrame mainFrame;
 	private ScorePanel scorePanel;
 	private Synth synth;
+	private JLabel infoLabel;
 
 	public Controller() {
 		mainFrame = new MainFrame();
 		scorePanel = new ScorePanel();
-
+		
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<html>");
+		sb.append("<div>Click to add notes.</div>");
+		sb.append("<div>Press spacebar to play.</div>");
+		sb.append("<div>Press 'x' to clear.</div>");
+		sb.append("</html>");
+		
+		infoLabel = new JLabel(sb.toString());
+		
 		mainFrame.setLayout(new BorderLayout());
 		mainFrame.add(scorePanel, BorderLayout.CENTER);
+		mainFrame.add(infoLabel, BorderLayout.SOUTH);
 
 		mainFrame.setKeyPressListener(this);
 
@@ -30,11 +44,17 @@ public class Controller implements KeyPressListener {
 	
 	private synchronized void playScore(NoteSet score) {
 		
+		// Making a copy helps avoid the play thread and swing thread
+		// modifying the note set at the same time, which throws a
+		// concurrent modification exception.
+		
+		NoteSet scoreCopy = new NoteSet(score);
+		
 
 		try {
 			synth.open();
 
-			for (ScoreNote n : score) {
+			for (ScoreNote n : scoreCopy) {
 				synth.play(n.getNote(), 100);
 
 				Thread.sleep(200);
