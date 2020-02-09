@@ -4,19 +4,21 @@ public class App {
 
 	public static void main(String[] args) {
 		
-		long value1 = 123456789123L;
-		float value2 = 32.7F;
-		byte value3 = (byte)127;
+		long lValue = 13348373898L;
+		System.out.println(lValue);
 		
-		System.out.println(value1);
-		System.out.println(value2);
-		System.out.println(value3);
+		float fValue = 7.34F;
+		System.out.println(fValue);
 		
-		int value4 = 10_000_000;
-		System.out.println(value4);
+		byte bValue = (byte)128;
+		System.out.println(bValue & 0xFF);
 		
-		double value5 = 1.5E7;
-		System.out.printf("%.2f\n", value5);
+		int iValue = 1_000_000;
+		System.out.println(iValue);
+		
+		double dValue = 1.5E6;
+		System.out.println(dValue);
+
 	}
 
 }

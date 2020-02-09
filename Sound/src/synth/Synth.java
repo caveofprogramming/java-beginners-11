@@ -25,7 +25,7 @@ public class Synth implements Closeable {
 		line.start();
 	}
 	
-	public void play(MusicalNote note, int duration) {
+	public void play(MusicalNote note, int duration) throws InterruptedException {
 				
 				int totalSamples = (SAMPLE_RATE * duration)/1000; // total number of samples to create
 				double envelope = 1.0;
@@ -42,7 +42,9 @@ public class Synth implements Closeable {
 					buf[0] = (byte) (sample & 0xFF);  
 					buf[1] = (byte) (sample >> 8);	
 					
+					
 					line.write(buf, 0, 2);
+					
 					
 					envelope = 1.0 - ((double)i/totalSamples);
 				}
@@ -50,7 +52,7 @@ public class Synth implements Closeable {
 
 	@Override
 	public void close() throws IOException {
-		line.drain();
+		
 		line.stop();
 	}
 }

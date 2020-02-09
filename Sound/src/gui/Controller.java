@@ -55,9 +55,7 @@ public class Controller implements KeyPressListener {
 			synth.open();
 
 			for (ScoreNote n : scoreCopy) {
-				synth.play(n.getNote(), 100);
-
-				Thread.sleep(200);
+				synth.play(n.getNote(), 50);
 			}
 
 			synth.close();

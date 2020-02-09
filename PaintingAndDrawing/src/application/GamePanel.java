@@ -25,7 +25,6 @@ public class GamePanel extends JPanel {
 		
 		g2.setColor(Color.GREEN);
 		g2.fillRect(0, 0, width, height);
-		
 	}
 	
 	

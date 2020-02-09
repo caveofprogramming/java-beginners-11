@@ -20,34 +20,25 @@ public class App {
 		System.out.println(intValue1.equals(intValue2));
 
 		// setting null
-		Integer value = 8;
-
-		if (value > 7) {
-			value = null;
-		}
-
-		if (value == null) {
-			System.out.println("Value not set");
-		} else {
-			System.out.println(value);
-		}
+		Double dValue = null;
+		System.out.println(dValue);
 
 		// parse methods
-		String floatText = "dfdsaf73.34";
-
+		
+		String intString = "73";
+		
 		try {
-			float floatValue = Float.parseFloat(floatText);
-			System.out.println(floatValue);
+			int intValue = Integer.parseInt(intString);
+			System.out.println(intValue);
 		} catch (NumberFormatException e) {
-			System.out.println("Invalid text for conversion");
+			System.out.println("Cannot convert to int: " + intString);
 		}
 
-		// Integer toString
-		String intString = Integer.toString(32, 2);
-		System.out.println(intString);
+		// Integer toBinaryString
+		
+		String binString = String.format("%8s", Integer.toBinaryString(23)).replace(' ', '0');
+		System.out.println(binString);
 
-		// toBinaryString
-		System.out.println(Integer.toBinaryString(8));
 	}
 
 }

@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 
 public class ArtPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private int CELLSIZE = 10;
+	private int CELLSIZE = 100;
 
 	private int width;
 	private int height;
