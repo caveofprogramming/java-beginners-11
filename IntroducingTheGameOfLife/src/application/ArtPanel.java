@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 
 public class ArtPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private int CELLSIZE = 100;
+	private int CELLSIZE = 20;
 
 	private int width;
 	private int height;
@@ -74,11 +74,14 @@ public class ArtPanel extends JPanel {
 			width = getWidth();
 			height = getHeight();
 			
-			rows = (width - (horizontalMargin * 2)) / CELLSIZE;
-			columns = (height - (verticalMargin * 2)) / CELLSIZE;
-
 			horizontalMargin = ((width % CELLSIZE) + CELLSIZE) / 2;
 			verticalMargin = ((height % CELLSIZE) + CELLSIZE) / 2;
+			
+			columns = (width - (horizontalMargin * 2)) / CELLSIZE;
+			System.out.println(columns);
+			rows = (height - (verticalMargin * 2)) / CELLSIZE;
+			System.out.println(rows);
+
 			
 			world = new World(rows, columns);
 
@@ -94,10 +97,10 @@ public class ArtPanel extends JPanel {
 		
 		drawGrid(g2);
 
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < columns; col++) {
-				boolean status = world.getSquare(row, col);
-				setSquare(g2, row, col, status);
+		for (int y = 0; y < rows; y++) {
+			for (int x = 0; x < columns; x++) {
+				boolean status = world.getSquare(x, y);
+				setSquare(g2, x, y, status);
 			}
 		}
 	}
@@ -111,11 +114,11 @@ public class ArtPanel extends JPanel {
 		int x = e.getX();
 		int y = e.getY();
 
-		int row = (x - horizontalMargin) / CELLSIZE;
-		int column = (y - verticalMargin) / CELLSIZE;
+		int gridX = (x - horizontalMargin) / CELLSIZE;
+		int gridY = (y - verticalMargin) / CELLSIZE;
 		
-		boolean status = world.getSquare(row, column);
-		world.setSquare(row, column, !status);
+		boolean status = world.getSquare(gridX, gridY);
+		world.setSquare(gridX, gridY, !status);
 
 		repaint();
 	}

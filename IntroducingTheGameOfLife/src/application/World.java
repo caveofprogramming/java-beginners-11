@@ -1,5 +1,6 @@
 package application;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class World {
@@ -23,18 +24,12 @@ public class World {
 
 		numSeeds = rows * columns / 5;
 
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < columns; col++) {
-				grid[row][col] = false;
-				buffer[row][col] = false;
-			}
-		}
-
 		for (int i = 0; i < numSeeds; i++) {
-			int row = random.nextInt(rows);
-			int column = random.nextInt(columns);
+			
+			int x = random.nextInt(columns);
+			int y = random.nextInt(rows);
 
-			grid[row][column] = true;
+			grid[y][x] = true;
 		}
 	}
 
@@ -55,6 +50,7 @@ public class World {
 		}
 
 		// Copy buffer to grid
+		
 		for (int row = 0; row < rows; row++) {
 			for (int col = 0; col < columns; col++) {
 				grid[row][col] = buffer[row][col];
@@ -99,20 +95,21 @@ public class World {
 		return neighbours;
 	}
 
-	public void setSquare(int row, int column, boolean status) {
-		grid[row][column] = status;
+	public void setSquare(int x, int y, boolean status) {
+		grid[y][x] = status;
 	}
 
-	public boolean getSquare(int row, int column) {
-		return grid[row][column];
+	public boolean getSquare(int x, int y) {
+		return grid[y][x];
 	}
 
 	public void clear() {
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < columns; col++) {
-				grid[row][col] = false;
-				buffer[row][col] = false;
-			}
+		
+		for(int y = 0; y < rows; y++) {
+			boolean[] row = grid[y];
+			
+			Arrays.fill(row, false);
 		}
+
 	}
 }
