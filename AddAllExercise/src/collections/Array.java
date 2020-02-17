@@ -19,8 +19,15 @@ public class Array<E> {
 		array[position++] = e;
 	}
 	
+	public void addAll(Array<? extends E> source) {
+		for(int i = 0; i < source.size(); i++) {
+			E item = source.get(i);
+			add(item);
+		}
+	}
+	
 	public int size() {
-		return array.length;
+		return position;
 	}
 	
 	public E get(int index) {

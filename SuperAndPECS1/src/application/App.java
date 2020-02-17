@@ -8,7 +8,7 @@ public class App {
 
 	public static void main(String[] args) {
 
-		Array<Mammal> mammals = new Array<>(2);
+		Array<Mammal> mammals = new Array<>(3);
 		mammals.add(new Mammal("dolphin"));
 		mammals.add(new Mammal("sheep"));
 		
@@ -18,13 +18,24 @@ public class App {
 		
 		feedAll(mammals);
 		feedAll(cats);
+		
+		System.out.println();
+		addMammal(mammals);
+		feedAll(mammals);
+		
+		System.out.println();
+		
+		
 	}
 
-	public static void feedAll(Array<? extends Mammal> mammals) {
+	private static void feedAll(Array<? extends Mammal> mammals) {
 		for(int i = 0; i < mammals.size(); i++) {
 			Mammal m = mammals.get(i);
 			m.feed();
 		}
 	}
-
+	
+	private static void addMammal(Array<Mammal> mammals) {
+		mammals.add(new Mammal("giraffe"));
+	}
 }

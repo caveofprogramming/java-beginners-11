@@ -11,4 +11,8 @@ public class Creature {
 	public String toString() {
 		return name;
 	}
+	
+	public void feed() {
+		System.out.println("Creature feeding");
+	}
 }

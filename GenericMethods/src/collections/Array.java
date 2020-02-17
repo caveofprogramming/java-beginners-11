@@ -23,6 +23,10 @@ public class Array<E> {
 		return array[index];
 	}
 	
+	public int size() {
+		return array.length;
+	}
+	
 	public String toString() {
 		
 		StringBuilder sb = new StringBuilder();

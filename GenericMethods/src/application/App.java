@@ -19,6 +19,22 @@ public class App {
 		
 		System.out.println(cats);
 		
+		System.out.println();
+
+		Cat c = find(cats, "Bertie");
+		System.out.println(c);
 	}
 
+	private static <T> T find(Array<T> array, String text) {
+		
+		for(int i = 0; i < array.size(); i++) {
+			T value = array.get(i);
+			
+			if(value.toString().equals(text)) {
+				return value;
+			}
+		}
+		
+		return null;
+	}
 }

@@ -20,7 +20,7 @@ public class Array<E> {
 	}
 	
 	public int size() {
-		return array.length;
+		return position;
 	}
 	
 	public E get(int index) {
