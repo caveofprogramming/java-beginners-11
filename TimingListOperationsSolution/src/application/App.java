@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /*
@@ -22,15 +23,26 @@ public class App {
 
 	public static void main(String[] args) {
 		
-		List<Integer> arrayList = new ArrayList<>(List.of(1,2,3));
+		List<Integer> arrayList = new ArrayList<>();
+		List<Integer> linkedList = new LinkedList<>();
 		
-		arrayList.add(0, 100);
-		arrayList.add(3, 1000);
+		timeOperations(arrayList, "ArrayList");
+		timeOperations(linkedList, "LinkedList");
+	}
+	
+	private static void timeOperations(List<Integer> list, String name) {
 		
-		arrayList.forEach(System.out::println);
+		long start = System.currentTimeMillis();
 		
-		System.out.println(System.currentTimeMillis());
+		for(int i = 0; i < 100_000; i++) {
+			list.add(0, i);
+		}
+		
+		long duration = System.currentTimeMillis() - start;
+		
+		System.out.println(name + ": " + duration);
 	}
 	
 	
 }
+
