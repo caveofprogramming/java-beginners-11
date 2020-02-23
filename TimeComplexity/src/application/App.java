@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /*
+ * Big O notation
+ * 
  * O(1)
  * O(n)
  * O(n^2)
@@ -21,19 +23,19 @@ public class App {
 		List<Integer> arrayList = new ArrayList<>();
 		List<Integer> linkedList = new LinkedList<>();
 
-		List<Integer> list = arrayList;
-		
-		try(var bw = new BufferedWriter(new FileWriter("timings.txt"))) {
+		List<Integer> list = linkedList;
+
+		try (var bw = new BufferedWriter(new FileWriter("timings.txt"))) {
 			for (int numberItems = 0; numberItems < 1E6; numberItems += 50_000) {
-				
+
 				for (int i = 0; i < numberItems; i++) {
 					list.add(i);
 				}
-				
+
 				long duration = timeOperations(list);
-				
+
 				String info = String.format("%d\t%d\n", numberItems, duration);
-				
+
 				bw.write(info);
 				System.out.print(info);
 			}
@@ -42,7 +44,6 @@ public class App {
 			e.printStackTrace();
 		}
 
-		
 	}
 
 	private static long timeOperations(List<Integer> list) {

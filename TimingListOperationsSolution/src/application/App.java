@@ -22,25 +22,23 @@ import java.util.List;
 public class App {
 
 	public static void main(String[] args) {
-		
 		List<Integer> arrayList = new ArrayList<>();
 		List<Integer> linkedList = new LinkedList<>();
 		
-		timeOperations(arrayList, "ArrayList");
-		timeOperations(linkedList, "LinkedList");
+		long duration = timeOperations(arrayList);
+		
+		System.out.println("Duration: " + duration);
 	}
 	
-	private static void timeOperations(List<Integer> list, String name) {
+	public static long timeOperations(List<Integer> list) {
 		
 		long start = System.currentTimeMillis();
 		
-		for(int i = 0; i < 100_000; i++) {
+		for(int i = 0; i < 1E5; i++) {
 			list.add(0, i);
 		}
 		
-		long duration = System.currentTimeMillis() - start;
-		
-		System.out.println(name + ": " + duration);
+		return System.currentTimeMillis() - start;
 	}
 	
 	
