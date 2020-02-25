@@ -119,8 +119,8 @@ public class App {
 		ring.add(4);
 		ring.add(5);
 		
-		for(var it = ring.iterator(); it.hasNext(); ) {
-			System.out.println(it.next());
+		for(var n: ring) {
+			System.out.println(n);
 		}
 
 	}
